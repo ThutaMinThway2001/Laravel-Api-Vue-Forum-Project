@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule as ValidationRule;
 
 class PostRequest extends FormRequest
 {
@@ -26,7 +27,8 @@ class PostRequest extends FormRequest
         return [
             'title' => 'required',
             'slug' => 'required',
-            'detail' => 'required'
+            'detail' => 'required',
+            'category_id' => ['required', ValidationRule::exists('categories', 'id')]
         ];
     }
 
@@ -35,7 +37,8 @@ class PostRequest extends FormRequest
         return [
             'title.required' => 'Enter Your Title',
             'slug.required' => 'Enter Your Slug',
-            'detail.required' => 'Enter Your Detail'
+            'detail.required' => 'Enter Your Detail',
+            'category_id.required' => 'Choose Your Level'
         ];
     }
 }

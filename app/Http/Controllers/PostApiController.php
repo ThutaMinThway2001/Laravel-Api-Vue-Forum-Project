@@ -15,12 +15,17 @@ class PostApiController extends Controller
      */
     public function index()
     {
-        $post = Post::latest()->get();
+        $post = Post::latest();
+
+        $post->when(request('search'), function ($query) {
+            $query->where('title', 'like', '%' . request('search') . '%')
+                ->orWhere('detail', 'like', '%' . request('search') . '%');
+        })->get();
 
         return response()->json([
             'status' => 200,
             'message' => 'success',
-            'data' => $post
+            'data' => $post->get()
         ]);
     }
 

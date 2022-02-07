@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -15,9 +17,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $mgmg = User::factory()->create(['name' => 'mgmg']);
-
-        Post::factory()->create(['user_id' => $mgmg->id]);
-        Post::factory(3)->create();
+        $thuta = User::factory()->create(['name' => 'thuta']);
+        $n5 = Category::factory()->create(['name' => 'n5', 'slug' => 'n5']);
+        Post::factory()->create(['user_id' => $thuta->id, 'category_id' => $n5->id]);
+        Comment::factory()->create();
     }
 }

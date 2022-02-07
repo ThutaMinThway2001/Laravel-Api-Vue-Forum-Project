@@ -25,24 +25,41 @@
                     <p class="nav-link" aria-current="page">CreatePost</p>
                 </router-link>
                 </li>
-                <li class="nav-item">
-                <a class="nav-link disabled"
-                    >Disabled</a
-                >
+                <li class="nav-item dropdown">
+                    <a
+                    class="nav-link dropdown-toggle"
+                    href="#"
+                    id="navbarDropdownMenuLink"
+                    role="button"
+                    data-mdb-toggle="dropdown"
+                    aria-expanded="false"
+                    >
+                    Category
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li v-for="category in categories" :key="category.id">
+                            <a class="logout dropdown-item" @click.prevent="categoryName(category.name)">{{category.name}}</a>
+                        </li> 
+                        <li>
+                            <a class="dropdown-item" @click.prevent="categoryName('all')">all</a>
+                        </li>
+                    </ul>
                 </li>
+                
             </ul>
             <!-- search -->
-            <form class="d-flex input-group w-auto">
+            <form class="d-flex input-group w-auto" @submit.prevent="searchPost">
                 <input
-                type="search"
+                type="text"
                 class="form-control"
                 placeholder="Type query"
-                aria-label="Search"
+                v-model="search"
                 />
                 <button
                 class="btn btn-outline-primary"
-                type="button"
+                type="submit"
                 data-mdb-ripple-color="dark"
+                
                 >
                 Search
                 </button>
@@ -90,6 +107,8 @@ import axios from 'axios';
 export default {
     data(){
         return{
+            search: '',
+            categories: {},
             authUser: '',
             token: localStorage.getItem('accessToken'),
         }
@@ -103,6 +122,27 @@ export default {
         }
     },
     methods:{
+        searchPost(){
+            
+            axios.get('http://127.0.0.1:8000/api/posts?search=' + this.search)
+            .then((response) => {
+                // console.log(response);
+                this.$emit('posts' , response.data.data)
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        },
+        categoryName(value){
+            this.$emit('filterBy', value)
+        },
+        getCategory(){
+            axios.get('http://127.0.0.1:8000/api/categories')
+            .then((response) => {
+                this.categories = response.data.data;
+            })
+            .catch((error) => console.log(error));
+            },
         getUser(){
             axios.get('/api/user', {
                 headers: {
@@ -129,6 +169,7 @@ export default {
     },
     created(){
         this.getUser();
+        this.getCategory();
     },
 }
 </script>

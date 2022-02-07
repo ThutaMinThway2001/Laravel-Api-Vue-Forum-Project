@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-md-3 mt-3" v-for="post in posts" :key="post.id">
+            <div class="col-md-3 mt-3" v-for="post in filterByName" :key="post.id">
                 <div class="card text-center">
                     <div class="card-header bg-success text-light flexing">
                         <div>
@@ -21,7 +21,7 @@
                     <div class="card-footer text-muted">
                         <div class="flexing">
                             <div class="item">
-                                N5
+                                {{post.category.name}}
                             </div>
                             <div class="item">
                                 {{post.author.name}}
@@ -37,6 +37,7 @@
 <script>
 import axios from 'axios'
 export default {
+    props: ['filterByName'],
     data(){
         return{
             posts: []

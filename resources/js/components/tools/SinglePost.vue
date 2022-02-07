@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-md-6 offset-2 mt-3">
+            <div class="col-md-6 offset-2 mt-5">
                 <div class="card text-center">
                     <div class="card-header bg-success text-light flexing">
                         <div>
@@ -40,6 +40,15 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card-footer">
+                        <form @submit.prevent="storeComment">
+                            <div class="form-group">
+                            <label for="" class="">Enter Comment</label>
+                            <textarea class="form-control" v-model="comment"></textarea>
+                            </div>
+                            <button class="btn btn-sm btn-success float-end mt-4">Submit</button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="col-md-3 offset-1 mt-3">
@@ -69,6 +78,26 @@
                 </div>
                 
             </div>
+
+        </div>
+        <div class="row" v-for="comment in post.comments" :key="comment.id">
+            <div class="col-md-6 offset-2 mt-3">
+            <div class="card text-white">
+                <div class="card-header bg-dark">
+                    <img
+                        src=""
+                        alt=""
+                        width="30px"
+                        style="border-radius: 50%"
+                    />
+                    {{comment.author.name}}
+                    <small>1s</small>
+                </div>
+                <div class="card-body text-dark">
+                    <p >{{comment.comment}}</p>
+                </div>
+            </div>
+            </div>
         </div>
     </div>
 </template>
@@ -79,11 +108,27 @@ export default {
     props: ['id'],
     data(){
         return{
+            comment: '',
             token: localStorage.getItem('accessToken'),
-            post: []
+            post: {}
         }
     },
     methods:{
+        storeComment(){
+            axios.post('http://127.0.0.1:8000/api/comments', {
+                comment: this.comment,
+                post_id: this.post.id
+            },{
+                headers: {
+                    'Accept' : 'application/json',
+                    'Authorization' : 'Bearer ' + this.token
+                }
+            }).then((response) => {
+                this.$router.go(0);
+            }).catch((error) => {
+                console.log(error);
+            })
+        },
         deletePost(id){
             Swal.fire({
                 title: 'Are you sure?',
