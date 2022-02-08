@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
+use Carbon\Carbon as CarbonCarbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class PostApiController extends Controller
 {
@@ -25,7 +27,7 @@ class PostApiController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'success',
-            'data' => $post->get()
+            'data' => $post->get(),
         ]);
     }
 

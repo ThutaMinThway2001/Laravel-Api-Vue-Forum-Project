@@ -11,7 +11,7 @@
                                 </p>
                             </router-link>
                         </div>
-                        <div><p class="pt-3">1s ago</p></div>
+                        <div><p class="pt-3">{{post.created_at | myDate}}</p></div>
                     </div>
                     <div class="card-body">
                         <p class="card-text">
@@ -20,6 +20,12 @@
                     </div>
                     <div class="card-footer text-muted">
                         <div class="flexing">
+                            <div class="item">
+                                <!-- Before Like -->
+                                <span><i class="far fa-heart"></i></span>
+                                <!-- After Like -->
+                                <span><i class="fas fa-heart"></i></span>
+                            </div>
                             <div class="item">
                                 {{post.category.name}}
                             </div>

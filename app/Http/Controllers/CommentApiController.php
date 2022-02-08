@@ -15,11 +15,8 @@ class CommentApiController extends Controller
      */
     public function index()
     {
-        // request()->validate([
-        //     'post_id' => 'required'
-        // ]);
         $post_id = request('post_id');
-        $comments = Comment::find($post_id)->comment;
+        $comments = Comment::all();
         return response()->json([
             'status' => 200,
             'message' => 'success',

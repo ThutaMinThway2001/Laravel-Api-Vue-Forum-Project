@@ -7,7 +7,7 @@
                         <div>
                             <h3>{{post.title}}</h3>
                         </div>
-                        <div><span>1s ago</span></div>
+                        <div><span>{{post.created_at | myDate}}</span></div>
                     </div>
                     <div class="card-body">
                         <p class="card-text">
@@ -17,7 +17,7 @@
                     <div class="card-footer text-muted">
                         <div class="flexing">
                             <div class="item">
-                                N5
+                                {{post.category.name}}
                             </div>
                             <div class="item">
                                 {{post.author.name}}
@@ -91,7 +91,7 @@
                         style="border-radius: 50%"
                     />
                     {{comment.author.name}}
-                    <small>1s</small>
+                    <small class="float-end">{{comment.created_at | second}}</small>
                 </div>
                 <div class="card-body text-dark">
                     <p >{{comment.comment}}</p>
