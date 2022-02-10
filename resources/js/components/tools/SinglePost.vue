@@ -56,13 +56,13 @@
                 <div class="card text-center mb-2">
                     <div class="card-header bg-success text-light flexing">
                         <div>
-                            <h3>{{post.title}}</h3>
+                            <h3>{{randomPost.title}}</h3>
                         </div>
                         <div><span>1s ago</span></div>
                     </div>
                     <div class="card-body">
                         <p class="card-text">
-                            {{post.detail}}
+                            {{randomPost.detail}}
                         </p>
                     </div>
                     <div class="card-footer text-muted">
@@ -71,7 +71,7 @@
                                 N5
                             </div>
                             <div class="item">
-                                {{post.author.name}}
+                                {{randomPost.author.name}}
                             </div>
                         </div>
                     </div>
@@ -110,7 +110,8 @@ export default {
         return{
             comment: '',
             token: localStorage.getItem('accessToken'),
-            post: {}
+            post: {},
+            randomPost: {}
         }
     },
     methods:{
@@ -156,7 +157,9 @@ export default {
         getSinglePost(){
             axios.get(`/api/posts/${this.id}`)
             .then((response) => {
-                this.post = response.data
+                console.log(response);
+                this.post = response.data.data
+                this.randomPost = response.data.randomPost
             })
             .catch((err) => console.log(err));
         }

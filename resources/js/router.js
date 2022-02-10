@@ -48,15 +48,15 @@ const router =  new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    // console.log(to);
-    // if(to.path === '/login' || to.path === '/register'){
-    //     let accessToken = localStorage.getItem('accessToken');
-    //     if(!accessToken){
-    //         next();
-    //     }else{
-    //         next('/');
-    //     }
-    // }
+    console.log(to);
+    if(to.path === '/login' || to.path === '/register'){
+        let accessToken = localStorage.getItem('accessToken');
+        if(!accessToken){
+            next();
+        }else{
+            next('/');
+        }
+    }
     next();
 })
 

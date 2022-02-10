@@ -10,7 +10,7 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $with = ['author', 'category', 'comments'];
+    protected $with = ['author', 'category', 'comments', 'likes'];
     protected $fillable = ['user_id', 'title', 'slug', 'detail', 'category_id', 'comment', 'post_id'];
 
     public function author()
@@ -26,5 +26,10 @@ class Post extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
     }
 }

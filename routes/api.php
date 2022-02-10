@@ -2,11 +2,15 @@
 
 use App\Http\Controllers\CategoryApiController;
 use App\Http\Controllers\CommentApiController;
+use App\Http\Controllers\LikeApiController;
 use App\Http\Controllers\PostApiController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+// Route::middleware('roleModel:api')->group(function () {
+// });
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -20,7 +24,9 @@ Route::middleware('auth:api')->group(function () {
     #comments
     Route::post('/comments', [CommentApiController::class, 'store']);
     #end comments
-
+    #like
+    Route::post('/likes', [LikeApiController::class, 'like']);
+    Route::delete('/likes/{like}', [LikeApiController::class, 'disLike']);
 });
 #posts
 Route::get('/posts', [PostApiController::class, 'index']);
@@ -28,6 +34,9 @@ Route::get('/posts/{post}', [PostApiController::class, 'show']);
 #end posts
 
 Route::get('/comments', [CommentApiController::class, 'index']);
+
+
+#dislike
 
 
 #categories

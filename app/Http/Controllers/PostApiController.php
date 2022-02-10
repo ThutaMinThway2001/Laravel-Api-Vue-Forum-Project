@@ -7,9 +7,11 @@ use App\Models\Post;
 use Carbon\Carbon as CarbonCarbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use App\Trait\Post as PostTrait;
 
 class PostApiController extends Controller
 {
+    use PostTrait;
     /**
      * Display a listing of the resource.
      *
@@ -17,9 +19,9 @@ class PostApiController extends Controller
      */
     public function index()
     {
-        $post = Post::latest();
+        $posts = Post::latest();
 
-        $post->when(request('search'), function ($query) {
+        $posts->when(request('search'), function ($query) {
             $query->where('title', 'like', '%' . request('search') . '%')
                 ->orWhere('detail', 'like', '%' . request('search') . '%');
         })->get();
@@ -27,7 +29,8 @@ class PostApiController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'success',
-            'data' => $post->get(),
+            'data' => $posts->get(),
+
         ]);
     }
 
@@ -59,7 +62,12 @@ class PostApiController extends Controller
      */
     public function show(Post $post)
     {
-        return $post;
+        return response()->json([
+            'success' => 200,
+            'data' => $post,
+            'message' => 'success',
+            'randomPost' => Post::inRandomOrder()->first()
+        ]);
     }
 
     /**

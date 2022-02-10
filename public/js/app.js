@@ -2518,19 +2518,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['filterByName'],
+  props: ["filterByName"],
   data: function data() {
     return {
+      likeCount: '',
+      token: localStorage.getItem("accessToken"),
       posts: []
     };
   },
   methods: {
+    like: function like(id, index) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://127.0.0.1:8000/api/likes", {
+        post_id: id
+      }, {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer " + this.token
+        }
+      }).then(function (response) {
+        window.location.reload();
+      })["catch"](function (error) {
+        return console.log(error.response.data);
+      });
+    },
     getPosts: function getPosts() {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/posts').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/posts").then(function (response) {
         _this.posts = response.data.data;
       })["catch"](function (err) {
         return console.log(err);
@@ -2668,7 +2708,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       comment: '',
       token: localStorage.getItem('accessToken'),
-      post: {}
+      post: {},
+      randomPost: {}
     };
   },
   methods: {
@@ -2724,7 +2765,9 @@ __webpack_require__.r(__webpack_exports__);
       var _this3 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/posts/".concat(this.id)).then(function (response) {
-        _this3.post = response.data;
+        console.log(response);
+        _this3.post = response.data.data;
+        _this3.randomPost = response.data.randomPost;
       })["catch"](function (err) {
         return console.log(err);
       });
@@ -3146,15 +3189,18 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_7__["default"]({
   }]
 });
 router.beforeEach(function (to, from, next) {
-  // console.log(to);
-  // if(to.path === '/login' || to.path === '/register'){
-  //     let accessToken = localStorage.getItem('accessToken');
-  //     if(!accessToken){
-  //         next();
-  //     }else{
-  //         next('/');
-  //     }
-  // }
+  console.log(to);
+
+  if (to.path === '/login' || to.path === '/register') {
+    var accessToken = localStorage.getItem('accessToken');
+
+    if (!accessToken) {
+      next();
+    } else {
+      next('/');
+    }
+  }
+
   next();
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (router);
@@ -3226,7 +3272,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.flexing{\n    display: flex;\n    justify-content: space-between;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.flexing {\r\n    display: flex;\r\n    justify-content: space-between;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -31261,7 +31307,7 @@ var render = function () {
     _c(
       "div",
       { staticClass: "row" },
-      _vm._l(_vm.filterByName, function (post) {
+      _vm._l(_vm.filterByName, function (post, index) {
         return _c("div", { key: post.id, staticClass: "col-md-3 mt-3" }, [
           _c("div", { staticClass: "card text-center" }, [
             _c(
@@ -31275,7 +31321,10 @@ var render = function () {
                       "router-link",
                       {
                         attrs: {
-                          to: { name: "singlePost", params: { id: post.id } },
+                          to: {
+                            name: "singlePost",
+                            params: { id: post.id },
+                          },
                         },
                       },
                       [
@@ -31312,7 +31361,37 @@ var render = function () {
             _vm._v(" "),
             _c("div", { staticClass: "card-footer text-muted" }, [
               _c("div", { staticClass: "flexing" }, [
-                _vm._m(0, true),
+                _c("div", { staticClass: "item" }, [
+                  _c("span", [
+                    post.likes.length == 0
+                      ? _c("i", {
+                          staticClass: "far fa-heart",
+                          on: {
+                            click: function ($event) {
+                              $event.preventDefault()
+                              return _vm.like(post.id, index)
+                            },
+                          },
+                        })
+                      : _vm._e(),
+                  ]),
+                  _vm._v(" "),
+                  _c("span", [
+                    post.likes.length > 0
+                      ? _c("i", {
+                          staticClass: "fas fa-heart",
+                          on: {
+                            click: function ($event) {
+                              $event.preventDefault()
+                              return _vm.like(post.id, index)
+                            },
+                          },
+                        })
+                      : _vm._e(),
+                  ]),
+                  _vm._v(" "),
+                  _c("span", [_vm._v(_vm._s(post.likes.length))]),
+                ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "item" }, [
                   _vm._v(
@@ -31338,18 +31417,7 @@ var render = function () {
     ),
   ])
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "item" }, [
-      _c("span", [_c("i", { staticClass: "far fa-heart" })]),
-      _vm._v(" "),
-      _c("span", [_c("i", { staticClass: "fas fa-heart" })]),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -31532,7 +31600,7 @@ var render = function () {
               "div",
               { staticClass: "card-header bg-success text-light flexing" },
               [
-                _c("div", [_c("h3", [_vm._v(_vm._s(_vm.post.title))])]),
+                _c("div", [_c("h3", [_vm._v(_vm._s(_vm.randomPost.title))])]),
                 _vm._v(" "),
                 _vm._m(1),
               ]
@@ -31542,7 +31610,7 @@ var render = function () {
               _c("p", { staticClass: "card-text" }, [
                 _vm._v(
                   "\n                        " +
-                    _vm._s(_vm.post.detail) +
+                    _vm._s(_vm.randomPost.detail) +
                     "\n                    "
                 ),
               ]),
@@ -31559,7 +31627,7 @@ var render = function () {
                 _c("div", { staticClass: "item" }, [
                   _vm._v(
                     "\n                            " +
-                      _vm._s(_vm.post.author.name) +
+                      _vm._s(_vm.randomPost.author.name) +
                       "\n                        "
                   ),
                 ]),
