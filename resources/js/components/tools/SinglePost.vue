@@ -24,8 +24,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div class="card-footer" v-if="showED == 'true'">
                         <div class="btnFlexing">
+                                <!-- Edit -->
                             <div class="item">
                                 <router-link :to="{name: 'updatePost', params: {id: post.id}}">
                                     <button class="btn btn-sm btn-rounded btn-warning">
@@ -33,6 +34,7 @@
                                 </button>
                                 </router-link>
                             </div>
+                                <!-- Delete -->
                             <div class="item">
                                 <button @click.prevent="deletePost(post.id)" class="btn btn-sm btn-rounded btn-danger ms-3">
                                     <span><i class="far fa-trash-alt me-2"></i></span>Delete
@@ -56,9 +58,11 @@
                 <div class="card text-center mb-2">
                     <div class="card-header bg-success text-light flexing">
                         <div>
-                            <h3>{{randomPost.title}}</h3>
+                            <h2 class="text-white pt-3">
+                                {{ randomPost.title }}
+                            </h2>
                         </div>
-                        <div><span>1s ago</span></div>
+                        <div><span>{{randomPost.created_at| second}}</span></div>
                     </div>
                     <div class="card-body">
                         <p class="card-text">
@@ -109,9 +113,20 @@ export default {
     data(){
         return{
             comment: '',
+            isAdmin: localStorage.getItem('isAdmin'),
+            authID: localStorage.getItem('authID'),
             token: localStorage.getItem('accessToken'),
             post: {},
             randomPost: {}
+        }
+    },
+    computed:{
+        showED(){
+            if(this.authID == this.post.user_id || this.isAdmin == 1){
+                return 'true';
+            }else{
+                return 'false';
+            }
         }
     },
     methods:{
@@ -157,7 +172,6 @@ export default {
         getSinglePost(){
             axios.get(`/api/posts/${this.id}`)
             .then((response) => {
-                console.log(response);
                 this.post = response.data.data
                 this.randomPost = response.data.randomPost
             })

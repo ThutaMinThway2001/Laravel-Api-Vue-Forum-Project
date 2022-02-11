@@ -6,6 +6,7 @@ import RegisterComponent from './components/register/Register'
 import SinglePostComponent from './components/tools/SinglePost'
 import CreatePostComponent from './components/views/CreatePost'
 import UpdatePostComponent from './components/views/UpdatePost'
+import AdminComponent from './components/admin/Index'
 
 Vue.use(VueRouter);
 
@@ -21,7 +22,7 @@ const router =  new VueRouter({
             path: '/posts/:id',
             name: 'singlePost',
             component: SinglePostComponent,
-            props: true
+            props: true,
         },
         {
             path: '/create',
@@ -43,12 +44,16 @@ const router =  new VueRouter({
             path: '/register',
             name: 'register',
             component: RegisterComponent
+        },
+        {
+            path: '/admin',
+            name: 'admin',
+            component: AdminComponent
         }
     ]
 })
 
 router.beforeEach((to, from, next) => {
-    console.log(to);
     if(to.path === '/login' || to.path === '/register'){
         let accessToken = localStorage.getItem('accessToken');
         if(!accessToken){
@@ -57,6 +62,16 @@ router.beforeEach((to, from, next) => {
             next('/');
         }
     }
+
+    if(to.path === '/admin'){
+        let isAdmin = localStorage.getItem('isAdmin');
+        if(isAdmin == 0){
+            next('/');
+        }else{
+            next();
+        }
+    }
+
     next();
 })
 

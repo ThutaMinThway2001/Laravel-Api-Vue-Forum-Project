@@ -36,15 +36,6 @@
                                 <span
                                     ><i
                                         class="far fa-heart"
-                                        v-if="post.likes.length == 0"
-                                        @click.prevent="like(post.id, index)"
-                                    ></i
-                                ></span>
-                                <!-- After Like -->
-                                <span
-                                    ><i
-                                        class="fas fa-heart"
-                                        v-if="post.likes.length > 0"
                                         @click.prevent="like(post.id, index)"
                                     ></i
                                 ></span>
@@ -70,17 +61,16 @@ export default {
     props: ["filterByName"],
     data() {
         return {
-            likeCount: '',
             token: localStorage.getItem("accessToken"),
             posts: [],
         };
     },
     methods: {
-        like(id, index) {
+        async like(id, index) {
             
-            axios
+            await axios
                 .post(
-                    "http://127.0.0.1:8000/api/likes",
+                    "/api/likes",
                     {
                         post_id: id,
                     },
@@ -92,7 +82,13 @@ export default {
                     }
                 )
                 .then((response) => {
-                    window.location.reload()
+                    if(response.data.message === 'success'){
+                        this.posts[index].likes.length++
+                    }else{
+                        this.posts[index].likes.length--
+                    }
+                        this.getPosts();
+                    return this.posts[index].likes.length
                 })
                 .catch((error) => console.log(error.response.data));
         },

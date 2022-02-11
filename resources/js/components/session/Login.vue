@@ -62,6 +62,8 @@ export default {
                 if(response.data.status === 200){
                     localStorage.setItem('accessToken', response.data.token);
                     localStorage.setItem('authName', response.data.data.name);
+                    localStorage.setItem('authID', response.data.data.id);
+                    localStorage.setItem('isAdmin', response.data.data.isAdmin);
                     localStorage.setItem('loggedin', 'success');
                     this.$router.push('/')
                 }else{

@@ -44,7 +44,7 @@ export default {
             }
 
             return this.posts
-        }
+        },
     },
     created(){
         this.getPosts();
@@ -59,7 +59,7 @@ export default {
         }, 2000)
     },
     mounted() {
-        // alert(this.current)
+        // console.log()
     },
 };
 </script>

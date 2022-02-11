@@ -32,3 +32,7 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return view('app');
 });
+
+Route::get('/admin', function () {
+    return view('app');
+});

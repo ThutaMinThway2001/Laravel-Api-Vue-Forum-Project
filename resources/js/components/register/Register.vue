@@ -24,7 +24,7 @@
                                 <input type="password" class="form-control" id="password" v-model="form.password">
                                 <div class="text-danger mt-1" v-if="form.errors.has('password')" v-html="form.errors.get('password')" />
                             </div>
-                            <Button :form="form" class="btn btn-sm btn-success mt-3 float-end">Login</Button>
+                            <Button :form="form" class="btn btn-sm btn-success mt-3 float-end">Register</Button>
                         </form>
                     </div>
                     <div class="card-footer">
@@ -61,6 +61,7 @@ export default {
             .then((response) => {
                 localStorage.setItem('accessToken', response.data.token);
                 localStorage.setItem('authName', response.data.data.name);
+                localStorage.setItem('authID', response.data.data.id);
                 Toast.fire({
                     icon: 'success',
                     title: 'Registered Successfully'
